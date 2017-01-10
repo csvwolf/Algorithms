@@ -10,8 +10,8 @@ public class Percolation {
 
     private WeightedQuickUnionUF uf;
     private int gridSize;
-    private final int START_POINT;
-    private final int END_POINT;
+    private final int startPoint;
+    private final int endPoint;
     private boolean[] sites;
     private int openSiteNumber;
 
@@ -21,15 +21,15 @@ public class Percolation {
         sites = new boolean[n * n];
         openSiteNumber = 0;
 
-        START_POINT = 0;
-        END_POINT = n * n + 1;
+        startPoint = 0;
+        endPoint = n * n + 1;
 
         for (int i = 1; i <= n; i++) {
-            uf.union(i, START_POINT);
+            uf.union(i, startPoint);
         }
 
         for (int i = n * (n - 1) + 1; i <= n * n; i++) {
-            uf.union(i, END_POINT);
+            uf.union(i, endPoint);
         }
 
         gridSize = n;
@@ -64,7 +64,7 @@ public class Percolation {
         }
 
         if (col != gridSize && sites[getSizeId(row, col + 1)]) {
-            uf.union(getFlattenId(row, col + 1), getFlattenId(row ,col));
+            uf.union(getFlattenId(row, col + 1), getFlattenId(row, col));
         }
     }
 
@@ -75,7 +75,7 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         if (row < 1 || row > gridSize || col < 1 || col > gridSize) throw new IndexOutOfBoundsException();
-        return uf.connected(getFlattenId(row, col), START_POINT);
+        return isOpen(row, col) && uf.connected(getFlattenId(row, col), startPoint);
     }
 
     public int numberOfOpenSites() {
@@ -83,7 +83,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return numberOfOpenSites() > 0 && uf.connected(START_POINT, END_POINT);
+        return numberOfOpenSites() > 0 && uf.connected(startPoint, endPoint);
     }
 
     public static void main(String[] args) {
