@@ -12,7 +12,7 @@ public class PercolationStats {
         int row, col;
         int i;
 
-        if (n < 0 || trials < 0) throw new IllegalArgumentException();
+        if (n <= 0 || trials <= 0) throw new IllegalArgumentException();
 
         Percolation[] percolations = new Percolation[trials];
         experimentScores = new double[trials];

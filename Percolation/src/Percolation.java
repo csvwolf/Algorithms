@@ -7,31 +7,24 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Percolation {
-
     private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF backwashChecked;
     private int gridSize;
     private final int startPoint;
     private final int endPoint;
-    private boolean[] sites;
+    private boolean[][] sites;
     private int openSiteNumber;
 
     public Percolation(int n) {
-        if (n < 0) throw new IllegalArgumentException();
+        if (n <= 0) throw new IllegalArgumentException();
         uf = new WeightedQuickUnionUF(n * n + 2);
-        sites = new boolean[n * n];
+        backwashChecked = new WeightedQuickUnionUF(n * n + 1);
+
+        sites = new boolean[n][n];
         openSiteNumber = 0;
 
         startPoint = 0;
         endPoint = n * n + 1;
-
-        for (int i = 1; i <= n; i++) {
-            uf.union(i, startPoint);
-        }
-
-        for (int i = n * (n - 1) + 1; i <= n * n; i++) {
-            uf.union(i, endPoint);
-        }
-
         gridSize = n;
     }
 
@@ -40,42 +33,51 @@ public class Percolation {
         return (row - 1) * gridSize + col;
     }
 
-    private int getSizeId(int row, int col) {
-        if (row < 1 || row > gridSize || col < 1 || col > gridSize) throw new IndexOutOfBoundsException();
-        return (row - 1) * gridSize + col - 1;
-    }
-
     public void open(int row, int col) {
         if (row < 1 || row > gridSize || col < 1 || col > gridSize) throw new IndexOutOfBoundsException();
         if (isOpen(row, col)) return;
 
-        sites[getSizeId(row, col)] = true;
+        sites[row - 1][col - 1] = true;
         openSiteNumber++;
-        if (row != 1 && sites[getSizeId(row - 1, col)]) {
+
+        if (row == 1) {
+            uf.union(getFlattenId(row, col), startPoint);
+            backwashChecked.union(getFlattenId(row, col), startPoint);
+        }
+
+        if (row == gridSize) {
+            uf.union(getFlattenId(row, col), endPoint);
+        }
+
+        if (row > 1 && isOpen(row - 1, col)) {
             uf.union(getFlattenId(row - 1, col), getFlattenId(row, col));
+            backwashChecked.union(getFlattenId(row - 1, col), getFlattenId(row, col));
         }
 
-        if (row != gridSize && sites[getSizeId(row + 1, col)]) {
+        if (row < gridSize && isOpen(row + 1, col)) {
             uf.union(getFlattenId(row + 1, col), getFlattenId(row, col));
+            backwashChecked.union(getFlattenId(row + 1, col), getFlattenId(row, col));
         }
 
-        if (col != 1 && sites[getSizeId(row, col - 1)]) {
+        if (col > 1 && isOpen(row, col - 1)) {
             uf.union(getFlattenId(row, col - 1), getFlattenId(row, col));
+            backwashChecked.union(getFlattenId(row, col - 1), getFlattenId(row, col));
         }
 
-        if (col != gridSize && sites[getSizeId(row, col + 1)]) {
+        if (col < gridSize && isOpen(row, col + 1)) {
             uf.union(getFlattenId(row, col + 1), getFlattenId(row, col));
+            backwashChecked.union(getFlattenId(row, col + 1), getFlattenId(row, col));
         }
     }
 
     public boolean isOpen(int row, int col) {
         if (row < 1 || row > gridSize || col < 1 || col > gridSize) throw new IndexOutOfBoundsException();
-        return sites[getSizeId(row, col)];
+        return sites[row - 1][col - 1];
     }
 
     public boolean isFull(int row, int col) {
         if (row < 1 || row > gridSize || col < 1 || col > gridSize) throw new IndexOutOfBoundsException();
-        return isOpen(row, col) && uf.connected(getFlattenId(row, col), startPoint);
+        return backwashChecked.connected(getFlattenId(row, col), startPoint);
     }
 
     public int numberOfOpenSites() {
