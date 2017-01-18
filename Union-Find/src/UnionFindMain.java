@@ -1,7 +1,7 @@
 /**
  * Created by SkyAo on 2017/1/7.
  */
-public class Main {
+public class UnionFindMain {
     public static void main(String args[]) {
         WeightedQuickUnionUF quickFindUF = new WeightedQuickUnionUF(8);
 
