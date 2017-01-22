@@ -1,18 +1,18 @@
 /**
  * Created by SkyAo on 2017/1/17.
  */
-public interface Stack {
+public interface StackOfString<Item> {
     /**
      * insert a new string onto stack
      * @param item
      */
-    public void push(String item);
+    public void push(Item item);
 
     /**
      * remove and return the string most recently added
      * @return
      */
-    public String pop();
+    public Item pop();
 
     /**
      * is the stack empty

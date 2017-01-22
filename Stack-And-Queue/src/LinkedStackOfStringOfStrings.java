@@ -3,16 +3,16 @@
  *
  * Created by SkyAo on 2017/1/17.
  */
-public class LinkedStackOfStrings implements Stack {
+public class LinkedStackOfStringOfStrings<Item> implements StackOfString<Item> {
     private class Node {
-        String item;
+        Item item;
         Node next;
     }
 
     private Node first = null;
     private int _size;
 
-    public void push(String item) {
+    public void push(Item item) {
         Node node = new Node();
         Node oldFirst = first;
         first = node;
@@ -21,8 +21,8 @@ public class LinkedStackOfStrings implements Stack {
         _size++;
     }
 
-    public String pop() {
-        String item = first.item;
+    public Item pop() {
+        Item item = first.item;
         first = first.next;
         _size--;
 
