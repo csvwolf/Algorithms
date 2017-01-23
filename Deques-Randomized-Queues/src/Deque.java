@@ -31,7 +31,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     public void addFirst(Item item) {
         Node oldFirst = first;
-        Node first = new Node();
+        first = new Node();
         first.item = item;
         first.prev = null;
         first.next = oldFirst;
@@ -50,11 +50,11 @@ public class Deque<Item> implements Iterable<Item> {
         N++;
 
         if (isEmpty()) {
-            last = newLast;
-            first = last;
+            first = newLast;
         } else {
             last.next = newLast;
         }
+        last = newLast;
     }
 
     public Item removeFirst() {
@@ -66,6 +66,7 @@ public class Deque<Item> implements Iterable<Item> {
         first = oldFirst.next;
         if (last == oldFirst) last = first;
         oldFirst = null;
+        first.prev = null;
         N--;
 
         return item;
@@ -80,6 +81,7 @@ public class Deque<Item> implements Iterable<Item> {
         last = oldLast.prev;
         if (first == oldLast) first = last;
         oldLast = null;
+        last.next = null;
         N--;
 
         return item;
@@ -99,7 +101,6 @@ public class Deque<Item> implements Iterable<Item> {
                 if (!hasNext()) throw new NoSuchElementException();
                 Item item = current.item;
                 current = current.next;
-                System.out.println(item);
                 return item;
             }
 
@@ -113,10 +114,11 @@ public class Deque<Item> implements Iterable<Item> {
         Deque<String> deque = new Deque<String>();
         deque.addFirst("World");
         deque.addFirst("Hello ");
-//        deque.addLast("!");
-//        deque.removeLast();
-//        deque.addLast(".");
-
+        deque.addLast("!");
+        deque.removeLast();
+        deque.addLast(".");
+        deque.removeFirst();
+        System.out.println(deque.size());
         Iterator iterator = deque.iterator();
         while (iterator.hasNext()) {
             System.out.print(iterator.next());
