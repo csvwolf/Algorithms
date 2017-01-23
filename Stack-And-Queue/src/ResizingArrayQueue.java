@@ -24,7 +24,7 @@ public class ResizingArrayQueue implements QueueOfString {
     }
 
     public int size() {
-        return tail - head;
+        return tail - head + 1;
     }
 
     private void resize(int capacity) {
