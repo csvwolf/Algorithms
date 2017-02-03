@@ -30,9 +30,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item[] newQueue = (Item []) new Object[length];
         int count = 0;
         for (int i = first; i < last; i++) {
-            if (queue[i] != null) {
-                newQueue[count++] = queue[i];
-            }
+            newQueue[count++] = queue[i];
         }
 
         queue = newQueue;
@@ -53,28 +51,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item item;
         if (isEmpty()) throw new NoSuchElementException();
         if (size() == queue.length / 4) resize(queue.length / 2);
-        int choice = StdRandom.uniform(1, n + 1);
-        int count = 0;
-        int i = 0;
-        int lastButOne = 0;
-        while (count != choice) {
-            if (queue[i] != null) {
-                count++;
-            }
+//        int choice = StdRandom.uniform(1, n + 1);
+        int choice = StdRandom.uniform(0, n);
+//        int count = 0;
+//        int i = 0;
+//        int result;
+//        int lastButOne = 0;
+//        while (count != choice) {
+//            if (queue[i] != null) {
+//                count++;
+//            }
+//
+//            if (count == n - 1) {
+//                lastButOne = i;
+//            }
+//
+//            i++;
+//        }
+//
+//        if (choice == n) {
+//            last = lastButOne + 1;
+//        }
 
-            if (count == n - 1) {
-                lastButOne = i;
-            }
+        item = queue[choice];
+        queue[choice] = queue[last - 1];
+        queue[--last] = null;
 
-            i++;
-        }
-
-        if (choice == n) {
-            last = lastButOne + 1;
-        }
-
-        item = queue[i - 1];
-        queue[i - 1] = null;
+//        item = queue[i - 1];
+//        queue[i - 1] = null;
         n--;
         return item;
     }
@@ -82,18 +86,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException();
 
-        int choice = StdRandom.uniform(1, n + 1);
-        int count = 0;
-        int i = 0;
+        int choice = StdRandom.uniform(0, n);
+//        int count = 0;
+//        int i = 0;
+//
+//        while (count != choice) {
+//            if (queue[i] != null) {
+//                count++;
+//            }
+//            i++;
+//        }
 
-        while (count != choice) {
-            if (queue[i] != null) {
-                count++;
-            }
-            i++;
-        }
-
-        return queue[i - 1];
+        return queue[choice];
     }
 
     private class RandomizedQueueIterator implements Iterator<Item> {
@@ -104,9 +108,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             copyQueue = (Item []) new Object[n];
             int count = 0;
             for (int i = first; i < last; i++) {
-                if (queue[i] != null) {
-                    copyQueue[count++] = queue[i];
-                }
+                copyQueue[count++] = queue[i];
             }
 
             index = 0;
@@ -139,8 +141,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         randomizedQueue.enqueue("WOrld");
         randomizedQueue.enqueue("!");
         randomizedQueue.dequeue();
-        randomizedQueue.dequeue();
-        randomizedQueue.dequeue();
+
 
         System.out.println(randomizedQueue.size());
         Iterator<String> iterator1 = randomizedQueue.iterator();
