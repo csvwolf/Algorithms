@@ -14,7 +14,7 @@ public class Permutation {
             queue.enqueue(StdIn.readString());
         }
 
-        Iterator iterator = queue.iterator();
+        Iterator<String> iterator = queue.iterator();
 
         for (int i = 0; i < k; i++) {
             StdOut.println(iterator.next());
